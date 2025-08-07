@@ -71,7 +71,18 @@ client.on('messageCreate', async (message) => {
                 .setTimestamp();
             message.reply({ embeds: [helpEmbed] });
             break;
-    }
+        
+        case 'joke':
+            const jokes = [
+                "Why don't programmers like nature? It has too many bugs! 🐛",
+                "How many programmers does it take to change a light bulb? None – that's a hardware problem! 💡", 
+                "Why do Java developers wear glasses? Because they can't C# ! 👓",
+                "A SQL query goes into a bar, walks up to two tables and asks: 'Can I join you?' 🍺"
+            ];
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            message.reply(randomJoke);
+            break;
+    }   
 });
 
 // Slash command handler
