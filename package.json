@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "register": "node src/utils/register-commands.js"
+    "register": "node src/utils/register-commands.js",
+    "clear": "node src/utils/clear-commands.js"
   },
   "dependencies": {
     "discord.js": "^14.14.1",

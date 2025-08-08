@@ -25,17 +25,27 @@ const rest = new REST({ version: '10' }).setToken(config.token);
 
 (async () => {
     try {
-        console.log(`🔄 Started refreshing ${commands.length} application (/) commands.`);
-
-        // Register commands globally (takes 1 hour to update)
-        // For instant updates in development, use guild-specific registration
+        console.log(`\n🔄 Started refreshing ${commands.length} application (/) commands.`);
+        
+        // Get guild name for better feedback
+        const guild = await rest.get(Routes.guild(config.guildId));
+        console.log(`🏠 Target Guild: ${guild.name} (ID: ${config.guildId})`);
+        
+        // Register commands for specific guild (instant updates for development)
+        // For global commands, use Routes.applicationCommands(config.clientId)
         const data = await rest.put(
-            Routes.applicationCommands(config.clientId),
+            Routes.applicationGuildCommands(config.clientId, config.guildId),
             { body: commands },
         );
 
-        console.log(`✅ Successfully reloaded ${data.length} application (/) commands.`);
+        console.log(`✅ Successfully reloaded ${data.length} application (/) commands for "${guild.name}"`);
+        console.log(`⚡ Commands are now available instantly in that Discord server!`);
     } catch (error) {
         console.error('❌ Error registering commands:', error);
+        if (error.code === 10004) {
+            console.error('🚨 Guild not found! Make sure your GUILD_ID is correct in .env file.');
+        } else if (error.code === 50001) {
+            console.error('🚨 Missing access! Make sure your bot is in the target guild.');
+        }
     }
-});
+})();
